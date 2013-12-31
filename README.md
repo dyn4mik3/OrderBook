@@ -11,8 +11,31 @@ Features:
 Requirements:
 * bintrees
 
+Usage
+=====
+
+Install package:
+
+```
+pip install orderbook 
+```
+
+Import package:
+
+```python
+from orderbook import OrderBook
+```
+
+Take a look at example.py: https://github.com/dyn4mik3/OrderBook/blob/master/orderbook/test/example.py
+
 Key Functions
 =============
+
+Create an Order Book:
+
+```python
+order_book = OrderBook()
+```
 
 process_order
 
