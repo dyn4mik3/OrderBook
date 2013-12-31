@@ -1,1 +1,2 @@
+v0.1.2, 2013-12-31 -- Updated README.md
 v0.1, 2013-12-30 -- Initial release.
