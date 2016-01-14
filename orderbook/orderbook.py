@@ -160,7 +160,7 @@ class OrderBook(object):
                 self.bids.remove_order_by_id(order_id)
         elif side == 'ask':
             if self.asks.order_exists(order_id):
-                self.bids.remove_order_by_id(order_id)
+                self.asks.remove_order_by_id(order_id)
         else:
             sys.exit('cancel_order() given neither "bid" nor "ask"')
 
