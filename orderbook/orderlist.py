@@ -92,8 +92,9 @@ class OrderList(object):
     def __str__(self):
         from cStringIO import StringIO
         temp_file = StringIO()
-        for order in self:
-            temp_file.write("%s\n" % str(order))
+        #for order in self:
+        #    temp_file.write("%s\n" % str(order))
+        temp_file.write("%s\n" % str(self.head_order))
         return temp_file.getvalue()
             
 

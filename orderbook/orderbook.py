@@ -233,7 +233,7 @@ class OrderBook(object):
         if self.tape != None and len(self.tape) > 0:
             num = 0
             for entry in self.tape:
-                if num < 5: # get last 5 entries
+                if num < 10: # get last 5 entries
                     tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ")\n")
                     num += 1
                 else:
