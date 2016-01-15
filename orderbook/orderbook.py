@@ -56,6 +56,7 @@ class OrderBook(object):
             head_order = order_list.get_head_order()
             traded_price = head_order.price
             counter_party = head_order.trade_id
+            new_book_quantity = None
             if quantity_to_trade < head_order.quantity:
                 traded_quantity = quantity_to_trade
                 # Do the transaction
@@ -88,11 +89,11 @@ class OrderBook(object):
                     }
 
             if side == 'bid':
-                transaction_record['party1'] = [counter_party, 'bid', head_order.order_id]
-                transaction_record['party2'] = [quote['trade_id'], 'ask', None]
+                transaction_record['party1'] = [counter_party, 'bid', head_order.order_id, new_book_quantity]
+                transaction_record['party2'] = [quote['trade_id'], 'ask', None, None]
             else:
-                transaction_record['party1'] = [counter_party, 'ask', head_order.order_id]
-                transaction_record['party2'] = [quote['trade_id'], 'bid', None]
+                transaction_record['party1'] = [counter_party, 'ask', head_order.order_id, new_book_quantity]
+                transaction_record['party2'] = [quote['trade_id'], 'bid', None, None]
 
             self.tape.append(transaction_record)
             trades.append(transaction_record)
