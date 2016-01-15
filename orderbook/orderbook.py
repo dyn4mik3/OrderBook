@@ -123,7 +123,7 @@ class OrderBook(object):
         side = quote['side']
         price = quote['price']
         if side == 'bid':
-            while (self.asks and price > self.asks.min_price() and quantity_to_trade > 0):
+            while (self.asks and price >= self.asks.min_price() and quantity_to_trade > 0):
                 best_price_asks = self.asks.min_price_list()
                 quantity_to_trade, new_trades = self.process_order_list('ask', best_price_asks, quantity_to_trade, quote, verbose)
                 trades += new_trades
@@ -135,7 +135,7 @@ class OrderBook(object):
                 self.bids.insert_order(quote)
                 order_in_book = quote
         elif side == 'ask':
-            while (self.bids and price < self.bids.max_price() and quantity_to_trade > 0):
+            while (self.bids and price <= self.bids.max_price() and quantity_to_trade > 0):
                 best_price_bids = self.bids.max_price_list()
                 quantity_to_trade, new_trades = self.process_order_list('bid', best_price_bids, quantity_to_trade, quote, verbose)
                 trades += new_trades
