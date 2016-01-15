@@ -226,7 +226,7 @@ class OrderBook(object):
             for key, value in self.bids.price_tree.items(reverse=True):
                 tempfile.write('%s' % value)
         tempfile.write("\n***Asks***\n")
-        if self.asks != None and len(self.bids) > 0:
+        if self.asks != None and len(self.asks) > 0:
             for key, value in self.asks.price_tree.items():
                 tempfile.write('%s' % value)
         tempfile.write("\n***Trades***\n")
