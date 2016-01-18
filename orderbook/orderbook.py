@@ -56,6 +56,7 @@ class OrderBook(object):
             head_order = order_list.get_head_order()
             traded_price = head_order.price
             counter_party = head_order.trade_id
+            new_book_quantity = None
             if quantity_to_trade < head_order.quantity:
                 traded_quantity = quantity_to_trade
                 # Do the transaction
@@ -88,11 +89,11 @@ class OrderBook(object):
                     }
 
             if side == 'bid':
-                transaction_record['party1'] = [counter_party, 'bid', head_order.order_id]
-                transaction_record['party2'] = [quote['trade_id'], 'ask', None]
+                transaction_record['party1'] = [counter_party, 'bid', head_order.order_id, new_book_quantity]
+                transaction_record['party2'] = [quote['trade_id'], 'ask', None, None]
             else:
-                transaction_record['party1'] = [counter_party, 'ask', head_order.order_id]
-                transaction_record['party2'] = [quote['trade_id'], 'bid', None]
+                transaction_record['party1'] = [counter_party, 'ask', head_order.order_id, new_book_quantity]
+                transaction_record['party2'] = [quote['trade_id'], 'bid', None, None]
 
             self.tape.append(transaction_record)
             trades.append(transaction_record)
@@ -123,7 +124,7 @@ class OrderBook(object):
         side = quote['side']
         price = quote['price']
         if side == 'bid':
-            while (self.asks and price > self.asks.min_price() and quantity_to_trade > 0):
+            while (self.asks and price >= self.asks.min_price() and quantity_to_trade > 0):
                 best_price_asks = self.asks.min_price_list()
                 quantity_to_trade, new_trades = self.process_order_list('ask', best_price_asks, quantity_to_trade, quote, verbose)
                 trades += new_trades
@@ -135,7 +136,7 @@ class OrderBook(object):
                 self.bids.insert_order(quote)
                 order_in_book = quote
         elif side == 'ask':
-            while (self.bids and prce < self.bids.max_price() and quantity_to_trade > 0):
+            while (self.bids and price <= self.bids.max_price() and quantity_to_trade > 0):
                 best_price_bids = self.bids.max_price_list()
                 quantity_to_trade, new_trades = self.process_order_list('bid', best_price_bids, quantity_to_trade, quote, verbose)
                 trades += new_trades
@@ -160,7 +161,7 @@ class OrderBook(object):
                 self.bids.remove_order_by_id(order_id)
         elif side == 'ask':
             if self.asks.order_exists(order_id):
-                self.bids.remove_order_by_id(order_id)
+                self.asks.remove_order_by_id(order_id)
         else:
             sys.exit('cancel_order() given neither "bid" nor "ask"')
 
@@ -225,14 +226,14 @@ class OrderBook(object):
             for key, value in self.bids.price_tree.items(reverse=True):
                 tempfile.write('%s' % value)
         tempfile.write("\n***Asks***\n")
-        if self.asks != None and len(self.bids) > 0:
+        if self.asks != None and len(self.asks) > 0:
             for key, value in self.asks.price_tree.items():
                 tempfile.write('%s' % value)
         tempfile.write("\n***Trades***\n")
         if self.tape != None and len(self.tape) > 0:
             num = 0
             for entry in self.tape:
-                if num < 5: # get last 5 entries
+                if num < 10: # get last 5 entries
                     tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ")\n")
                     num += 1
                 else:
