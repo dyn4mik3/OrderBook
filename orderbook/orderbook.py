@@ -1,9 +1,9 @@
 import sys
 import math
 from collections import deque # a faster insert/pop queue
-from cStringIO import StringIO
+from six.moves import cStringIO as StringIO
 
-from ordertree import OrderTree
+from .ordertree import OrderTree
 
 class OrderBook(object):
     def __init__(self, tick_size = 0.0001):
@@ -78,8 +78,8 @@ class OrderBook(object):
                     self.asks.remove_order_by_id(head_order.order_id)
                 quantity_to_trade -= traded_quantity
             if verbose:
-                print ("TRADE: Time - %d, Price - %f, Quantity - %d, TradeID - %d, Matching TradeID - %d" %
-                        (self.time, traded_price, traded_quantity, counter_party, quote['trade_id']))
+                print(("TRADE: Time - %d, Price - %f, Quantity - %d, TradeID - %d, Matching TradeID - %d" %
+                        (self.time, traded_price, traded_quantity, counter_party, quote['trade_id'])))
 
             transaction_record = {
                     'timestamp': self.time,
@@ -227,7 +227,7 @@ class OrderBook(object):
                 tempfile.write('%s' % value)
         tempfile.write("\n***Asks***\n")
         if self.asks != None and len(self.asks) > 0:
-            for key, value in self.asks.price_tree.items():
+            for key, value in list(self.asks.price_tree.items()):
                 tempfile.write('%s' % value)
         tempfile.write("\n***Trades***\n")
         if self.tape != None and len(self.tape) > 0:

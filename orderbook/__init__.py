@@ -1,3 +1,3 @@
-from orderbook import OrderBook
+from .orderbook import OrderBook
 
 __all__ = ['orderbook', 'ordertree', 'orderlist', 'order']
