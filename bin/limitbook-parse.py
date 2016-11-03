@@ -16,13 +16,15 @@ if __name__ == '__main__':
         trade_id = 0
         for line in reader:
             if line[0] == 'B' or line[0] == 'A':
-                tokens = line.split(",")
-                (trades, order) = order_book.process_order(
-                    {"type" : "limit",
+                tokens = line.strip().split(",")
+                d = {"type" : "limit",
                      "side" : "bid" if tokens[0] == 'B' else 'ask',
                      "quantity": int(tokens[1]),
                      "price" : Decimal(tokens[2]),
-                     "trade_id" : trade_id}, False, False)
+                     "trade_id" : trade_id}
+                if len(tokens) >=4:
+                    d['tag'] = tokens[3]
+                (trades, order) = order_book.process_order(d, False, False)
                 trade_id = trade_id + 1
             # Manual Debugging
             print ("\n")
