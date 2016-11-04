@@ -74,8 +74,7 @@ class OrderBook(object):
                     self.asks.remove_order_by_id(head_order.order_id)
                 quantity_to_trade -= traded_quantity
             if verbose:
-                print(("TRADE: Time - %d, Price - %f, Quantity - %d, TradeID - %d, Matching TradeID - %d" %
-                        (self.time, traded_price, traded_quantity, counter_party, quote['trade_id'])))
+                print(("TRADE: Time - {}, Price - {}, Quantity - {}, TradeID - {}, Matching TradeID - {}".format(self.time, traded_price, traded_quantity, counter_party, quote['trade_id'])))
 
             transaction_record = {
                     'timestamp': self.time,
@@ -230,7 +229,7 @@ class OrderBook(object):
             num = 0
             for entry in self.tape:
                 if num < 10: # get last 5 entries
-                    tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ")\n")
+                    tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ") " + str(entry['party1'][0]) + "/" + str(entry['party2'][0]) + "\n")
                     num += 1
                 else:
                     break

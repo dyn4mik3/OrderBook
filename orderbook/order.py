@@ -13,8 +13,7 @@ class Order(object):
         self.quantity = Decimal(quote['quantity']) # decimal representing amount of thing - can be partial amounts
         self.price = Decimal(quote['price']) # decimal representing price (currency)
         self.order_id = int(quote['order_id'])
-        self.trade_id = int(quote['trade_id'])
-        self.tag = quote.get('tag', None)
+        self.trade_id = quote['trade_id']
         # doubly linked list to make it easier to re-order Orders for a particular price point
         self.next_order = None
         self.prev_order = None
@@ -36,4 +35,5 @@ class Order(object):
         self.quantity = new_quantity
 
     def __str__(self):
-        return "Order: %s@%s Timestamp - %s%s" % (self.quantity, self.price, self.timestamp, '' if self.tag is None else (", Tag -%s" % self.tag))
+        return "{}@{}/{} - {}".format(self.quantity, self.price,
+                                      self.trade_id, self.timestamp)
