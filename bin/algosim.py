@@ -36,10 +36,12 @@ if __name__ == '__main__':
                 next
             elif line[0] == 'B' or line[0] == 'A':
                 (trade, order) = process_line(order_book, line)
+                myalgo.trade_stats(trade)
             # Manual Debugging
             print ("\n")
             print ("Input: " + line)
             print (order_book)
+            print (myalgo.stats())
 
             if myalgo != None:
                 algo_orders = myalgo.process_order(line,
@@ -47,11 +49,13 @@ if __name__ == '__main__':
                 for line in algo_orders:
                     (trade, order) = order_book.process_order(line,
                                                               False,
-                                                              True)
+                                                              False)
+                    myalgo.trade_stats(trade)
                 if len(algo_orders) > 0:
                     print("\n")
                     print("After algo")
                     print(order_book)
+                    print (myalgo.stats())
 
             input("Press enter to continue.")
         reader.close()
