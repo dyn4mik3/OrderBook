@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
             if myalgo != None:
                 algo_orders = myalgo.process_order(line,
-                                                   trades, order)
+                                                   trade, order)
                 for line in algo_orders:
                     (trade, order) = order_book.process_order(line,
                                                               False,
