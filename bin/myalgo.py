@@ -1,12 +1,13 @@
 from decimal import Decimal
 
 class Algorithm(object):
-    def __init__(self):
+    def __init__(self, order_book):
         self.active = False
-        pass
-    def process_order(self, line, trade, order, orderbook):
+        self.order_book = order_book
+
+    def process_order(self, line, trade, order):
         tokens = line.strip().split(",")
-        if tokens[0] == 'C' and tokens[1] == 'algo-start':
+        if tokens[0] == 'C' and tokens[1] == 'start-algo':
             print("starting-algo")
             self.active = True
             return self.start()
@@ -18,4 +19,4 @@ class Algorithm(object):
                  "side": "bid",
                  "quantity": 10000,
                  "price": Decimal(1.0 ),
-                 "trade_id" : 10000}]
+                 "trade_id" : "ME"}]
