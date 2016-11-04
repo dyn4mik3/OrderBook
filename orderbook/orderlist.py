@@ -90,7 +90,7 @@ class OrderList(object):
         self.tail_order = order
 
     def __str__(self):
-        from cStringIO import StringIO
+        from six.moves import cStringIO as StringIO
         temp_file = StringIO()
         #for order in self:
         #    temp_file.write("%s\n" % str(order))
