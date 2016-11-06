@@ -47,10 +47,14 @@ if __name__ == '__main__':
                 algo_orders = myalgo.process_order(line,
                                                    trade, order)
                 for line in algo_orders:
-                    (trade, order) = order_book.process_order(line,
-                                                              False,
-                                                              False)
-                    myalgo.trade_stats(trade)
+                    if line['type'] == 'cancel':
+                        order_book.cancel_order(line['side'],
+                                                line['order_id'])
+                    else:
+                        (trade, order) = order_book.process_order(line,
+                                                                  False,
+                                                                  False)
+                        myalgo.trade_stats(trade)
                 if len(algo_orders) > 0:
                     print("\n")
                     print("After algo")
