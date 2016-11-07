@@ -12,10 +12,10 @@ class Algorithm(object):
         if tokens[0] == 'C' and tokens[1] == 'start-algo':
             print("starting-algo")
             self.active = True
-            return self.start()
+            return (self.start(), 'start')
         if not self.active:
-            return []
-        return []
+            return ([], 'inactive')
+        return ([], 'inactive')
     
     def start(self):
         return [{"type": "limit",
@@ -24,7 +24,7 @@ class Algorithm(object):
                  "price": Decimal(1.04 ),
                  "trade_id" : "ME"}]
 
-    def trade_stats(self, trade):
+    def trade_stats(self, trade, mode):
         for i in trade:
             self.volume += i['quantity']
             if i['party1'][0] == "ME" or \
