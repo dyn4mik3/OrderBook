@@ -36,7 +36,7 @@ if __name__ == '__main__':
                 next
             elif line[0] == 'B' or line[0] == 'A':
                 (trade, order) = process_line(order_book, line)
-                myalgo.trade_stats(trade)
+                myalgo.trade_stats(trade, 'trade')
             # Manual Debugging
             print ("\n")
             print ("Input: " + line)
@@ -44,8 +44,8 @@ if __name__ == '__main__':
             print (myalgo.stats())
 
             if myalgo != None:
-                algo_orders = myalgo.process_order(line,
-                                                   trade, order)
+                (algo_orders, mode) = myalgo.process_order(line,
+                                                           trade, order)
                 for line in algo_orders:
                     if line['type'] == 'cancel':
                         order_book.cancel_order(line['side'],
@@ -54,7 +54,7 @@ if __name__ == '__main__':
                         (trade, order) = order_book.process_order(line,
                                                                   False,
                                                                   False)
-                        myalgo.trade_stats(trade)
+                        myalgo.trade_stats(trade, mode)
                 if len(algo_orders) > 0:
                     print("\n")
                     print("After algo")
