@@ -42,6 +42,7 @@ if __name__ == '__main__':
             print ("Input: " + line)
             print (order_book)
             print (myalgo.stats())
+ #           input("Press enter to continue.")
 
             if myalgo != None:
                 (algo_orders, mode) = myalgo.process_order(line,
@@ -60,8 +61,7 @@ if __name__ == '__main__':
                     print("After algo")
                     print(order_book)
                     print (myalgo.stats())
-
-            input("Press enter to continue.")
+#                    input("Press enter to continue.")
         reader.close()
     except IOError:
         print ('Cannot open input file "%s"' % sys.argv[1])
