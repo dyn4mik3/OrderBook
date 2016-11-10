@@ -44,7 +44,6 @@ class OrderTree(object):
         return order in self.order_map
 
     def insert_order(self, quote):
-        print(quote)
         if self.order_exists(quote['order_id']):
             self.remove_order_by_id(quote['order_id'])
         self.num_orders += 1
