@@ -32,8 +32,8 @@ class Algorithm(object):
                 self.my_volume += i['quantity']
     def stats(self):
         if (self.volume > 0):
-            return (self.volume, self.my_volume,
+            return (self.volume, self.my_volume, None,
                     self.my_volume / self.volume)
         else:
-            return None
+            return (self.volume, self.my_volume, None, None)
 
