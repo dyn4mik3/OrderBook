@@ -12,4 +12,5 @@ setup(
     install_requires=[
         "bintrees >= 2.0.1"
         ],
+    scripts=['bin/algosim.py']
     )
