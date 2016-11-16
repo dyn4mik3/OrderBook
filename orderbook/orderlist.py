@@ -35,6 +35,8 @@ class OrderList(object):
             self.last = self.last.next_order
             return return_value
 
+    __next__ = next # python3
+
     def get_head_order(self):
         return self.head_order
 
@@ -92,9 +94,9 @@ class OrderList(object):
     def __str__(self):
         from six.moves import cStringIO as StringIO
         temp_file = StringIO()
-        #for order in self:
-        #    temp_file.write("%s\n" % str(order))
-        temp_file.write("%s\n" % str(self.head_order))
+        for order in self:
+            temp_file.write("%s\n" % str(order))
+        #temp_file.write("%s\n" % str(self.head_order))
         return temp_file.getvalue()
             
 

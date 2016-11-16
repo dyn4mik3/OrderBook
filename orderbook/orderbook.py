@@ -2,6 +2,7 @@ import sys
 import math
 from collections import deque # a faster insert/pop queue
 from six.moves import cStringIO as StringIO
+from decimal import Decimal
 
 from .ordertree import OrderTree
 
@@ -15,11 +16,6 @@ class OrderBook(object):
         self.tick_size = tick_size
         self.time = 0
         self.next_order_id = 0
-
-    def clip_price(self, price):
-        '''Clips the price according to the tick size. May not make sense if not 
-        a currency'''
-        return round(price, int(math.log10(1 / self.tick_size)))
 
     def update_time(self):
         self.time += 1
@@ -39,7 +35,7 @@ class OrderBook(object):
         if order_type == 'market':
             trades = self.process_market_order(quote, verbose)
         elif order_type == 'limit':
-            quote['price'] = self.clip_price(quote['price'])
+            quote['price'] = Decimal(quote['price'])
             trades, order_in_book = self.process_limit_order(quote, from_data, verbose)
         else:
             sys.exit("order_type for process_order() is neither 'market' or 'limit'")
@@ -78,8 +74,7 @@ class OrderBook(object):
                     self.asks.remove_order_by_id(head_order.order_id)
                 quantity_to_trade -= traded_quantity
             if verbose:
-                print(("TRADE: Time - %d, Price - %f, Quantity - %d, TradeID - %d, Matching TradeID - %d" %
-                        (self.time, traded_price, traded_quantity, counter_party, quote['trade_id'])))
+                print(("TRADE: Time - {}, Price - {}, Quantity - {}, TradeID - {}, Matching TradeID - {}".format(self.time, traded_price, traded_quantity, counter_party, quote['trade_id'])))
 
             transaction_record = {
                     'timestamp': self.time,
@@ -183,7 +178,7 @@ class OrderBook(object):
             sys.exit('modify_order() given neither "bid" nor "ask"')
 
     def get_volume_at_price(self, side, price):
-        price = self.clip_price(price)
+        price = Decimal(price)
         if side == 'bid':
             volume = 0
             if self.bids.price_exists(price):
@@ -234,7 +229,7 @@ class OrderBook(object):
             num = 0
             for entry in self.tape:
                 if num < 10: # get last 5 entries
-                    tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ")\n")
+                    tempfile.write(str(entry['quantity']) + " @ " + str(entry['price']) + " (" + str(entry['timestamp']) + ") " + str(entry['party1'][0]) + "/" + str(entry['party2'][0]) + "\n")
                     num += 1
                 else:
                     break
