@@ -154,8 +154,7 @@ if __name__ == '__main__':
             printme ("participation=", stats[3])
 
             if myalgo != None:
-                (algo_orders, mode) = myalgo.process_order(line,
-                                                           trade, order)
+                (algo_orders, mode) = myalgo.process_order(line, order)
                 printme('')
                 printme("RUNNING ALGO WITH MODE=", mode)
                 old_orderbook = copy.deepcopy(order_book)
@@ -164,6 +163,18 @@ if __name__ == '__main__':
                     if line['type'] == 'cancel':
                         order_book.cancel_order(line['side'],
                                                 line['order_id'])
+                    elif line['type'] == 'cancel_all':
+                        if line['side'] == "bid":
+                            q = order_book.bids
+                        elif line['size'] == 'ask':
+                            q = order_book.asks
+                        else:
+                            sys.exit('not given bid or ask')
+                        for order in q.price_tree.get(Decimal(line['price']),
+                                                      []):
+                            if order.trade_id == line['trade_id']:
+                                order_book.cancel_order(line['side'],
+                                                        order.order_id)
                     elif line['type'] == 'modify':
                         order_book.modify_order(line['order_id'], {
                             'side': line['side'],
