@@ -11,6 +11,7 @@ import importlib
 import json
 import copy
 import difflib
+import pprint
 
 d = difflib.Differ()
 format='html'
@@ -106,7 +107,7 @@ if __name__ == '__main__':
              "price" : Decimal(tokens[2]),
              "trade_id" : tokens[3]}
         if output:
-            printme('external order=', d)
+            printme('external order=', pprint.pformat(d))
         return order_book.process_order(d, False, False)
                 
     
@@ -137,7 +138,7 @@ if __name__ == '__main__':
                 next
             elif line[0] == 'B' or line[0] == 'A':
                 (trade, order) = process_line(order_book, line, start_algo)
-                myalgo.trade_stats(trade, 'trade')
+                myalgo.process_trade(trade, 'trade')
             elif line[0:12] == 'C,start-algo':
                 start_algo = True
                 printme("--------- START -------")
@@ -159,7 +160,7 @@ if __name__ == '__main__':
                 printme("RUNNING ALGO WITH MODE=", mode)
                 old_orderbook = copy.deepcopy(order_book)
                 for line in algo_orders:
-                    printme(line)
+                    printme(pprint.pformat(line))
                     if line['type'] == 'cancel':
                         order_book.cancel_order(line['side'],
                                                 line['order_id'])
@@ -172,7 +173,7 @@ if __name__ == '__main__':
                         (trade, order) = order_book.process_order(line,
                                                                   False,
                                                                   False)
-                        myalgo.trade_stats(trade, mode)
+                        myalgo.process_trade(trade, mode)
                 if len(algo_orders) > 0:
                     printme("\n")
                     printme("After algo")

@@ -24,7 +24,7 @@ class Algorithm(object):
                  "price": Decimal(1.04 ),
                  "trade_id" : "ME"}]
 
-    def trade_stats(self, trade, mode):
+    def process_trade(self, trade, mode):
         for i in trade:
             self.volume += i['quantity']
             if i['party1'][0] == "ME" or \
