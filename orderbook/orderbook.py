@@ -29,7 +29,7 @@ class OrderBook(object):
             self.update_time()
             quote['timestamp'] = self.time
         if quote['quantity'] <= 0:
-            sys.exit('process_order() given order of quantity <= 0')
+            raise ValueError("quote quantity must be positive")
         if not from_data:
             self.next_order_id += 1
         if order_type == 'market':
@@ -38,7 +38,7 @@ class OrderBook(object):
             quote['price'] = Decimal(quote['price'])
             trades, order_in_book = self.process_limit_order(quote, from_data, verbose)
         else:
-            sys.exit("order_type for process_order() is neither 'market' or 'limit'")
+            raise ValueError('invalid order_type "%s", must be "market" or "limit"' % order_type)
         return trades, order_in_book
 
     def process_order_list(self, side, order_list, quantity_still_to_trade, quote, verbose):
@@ -109,7 +109,7 @@ class OrderBook(object):
                 quantity_to_trade, new_trades = self.process_order_list('bid', best_price_bids, quantity_to_trade, quote, verbose)
                 trades += new_trades
         else:
-            sys.exit('process_market_order() recieved neither "bid" nor "ask"')
+            raise ValueError('invalid side "%s", must be "bid" or "ask"' % side)
         return trades
 
     def process_limit_order(self, quote, from_data, verbose):
@@ -143,7 +143,7 @@ class OrderBook(object):
                 self.asks.insert_order(quote)
                 order_in_book = quote
         else:
-            sys.exit('process_limit_order() given neither "bid" nor "ask"')
+            raise ValueError('invalid side "%s", must be "bid" or "ask"' % side)
         return trades, order_in_book
 
     def cancel_order(self, side, order_id, time=None):
@@ -158,7 +158,7 @@ class OrderBook(object):
             if self.asks.order_exists(order_id):
                 self.asks.remove_order_by_id(order_id)
         else:
-            sys.exit('cancel_order() given neither "bid" nor "ask"')
+            raise ValueError('invalid side "%s", must be "bid" or "ask"' % side)
 
     def modify_order(self, order_id, order_update, time=None):
         if time:
@@ -175,7 +175,7 @@ class OrderBook(object):
             if self.asks.order_exists(order_update['order_id']):
                 self.asks.update_order(order_update)
         else:
-            sys.exit('modify_order() given neither "bid" nor "ask"')
+            raise ValueError('invalid side "%s", must be "bid" or "ask"' % side)
 
     def get_volume_at_price(self, side, price):
         price = Decimal(price)
@@ -190,7 +190,7 @@ class OrderBook(object):
                 volume = self.asks.get_price(price).volume
             return volume
         else:
-            sys.exit('get_volume_at_price() given neither "bid" nor "ask"')
+            raise ValueError('invalid side "%s", must be "bid" or "ask"' % side)
 
     def get_best_bid(self):
         return self.bids.max_price()
