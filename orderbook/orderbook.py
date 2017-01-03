@@ -1,4 +1,3 @@
-import sys
 import math
 from collections import deque # a faster insert/pop queue
 from six.moves import cStringIO as StringIO
