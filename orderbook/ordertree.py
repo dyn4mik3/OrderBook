@@ -1,4 +1,4 @@
-from bintrees import RBTree
+from sortedcontainers import SortedDict
 from .orderlist import OrderList
 from .order import Order
 
@@ -10,8 +10,8 @@ class OrderTree(object):
     '''
 
     def __init__(self):
-        self.price_tree = RBTree()
-        self.price_map = {} # Dictionary containing price : OrderList object
+        self.price_map = SortedDict() # Dictionary containing price : OrderList object
+        self.prices = self.price_map.keys()
         self.order_map = {} # Dictionary containing order_id : Order object
         self.volume = 0 # Contains total quantity from all Orders in tree
         self.num_orders = 0 # Contains count of Orders in tree
@@ -29,12 +29,10 @@ class OrderTree(object):
     def create_price(self, price):
         self.depth += 1 # Add a price depth level to the tree
         new_list = OrderList()
-        self.price_tree.insert(price, new_list) # Insert a new price into the tree
-        self.price_map[price] = new_list # Can i just get this by using self.price_tree.get_value(price)? Maybe this is faster though.
+        self.price_map[price] = new_list
 
     def remove_price(self, price):
         self.depth -= 1 # Remove a price depth level
-        self.price_tree.remove(price)
         del self.price_map[price]
 
     def price_exists(self, price):
@@ -80,13 +78,13 @@ class OrderTree(object):
 
     def max_price(self):
         if self.depth > 0:
-            return self.price_tree.max_key()
+            return self.prices[-1]
         else:
             return None
 
     def min_price(self):
         if self.depth > 0:
-            return self.price_tree.min_key()
+            return self.prices[0]
         else:
             return None
 

@@ -9,7 +9,7 @@ Features:
 * Add, cancel, update orders
 
 Requirements:
-* bintrees
+* sortedcontainers
 
 Usage
 =====
