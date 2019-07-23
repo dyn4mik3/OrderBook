@@ -7,7 +7,7 @@ class Algorithm(object):
         self.volume = 0
         self.my_volume = 0
 
-    def process_order(self, line, trade, order):
+    def process_order(self, line, order):
         tokens = line.strip().split(",")
         if tokens[0] == 'C' and tokens[1] == 'start-algo':
             print("starting-algo")
