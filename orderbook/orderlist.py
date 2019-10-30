@@ -2,7 +2,7 @@ class OrderList(object):
     '''
     A doubly linked list of Orders. Used to iterate through Orders when
     a price match is found. Each OrderList is associated with a single
-    price. Since a single price match can have more quantity than a single 
+    price. Since a single price match can have more quantity than a single
     Order, we may need multiple Orders to fullfill a transaction. The
     OrderList makes this easy to do. OrderList is naturally arranged by time.
     Orders at the front of the list have priority.
@@ -13,7 +13,7 @@ class OrderList(object):
         self.tail_order = None # last order in the list
         self.length = 0 # number of Orders in the list
         self.volume = 0 # sum of Order quantity in the list AKA share volume
-        self.last = None # helper for iterating 
+        self.last = None # helper for iterating
 
     def __len__(self):
         return self.length
@@ -23,8 +23,8 @@ class OrderList(object):
         return self
 
     def next(self):
-        '''Get the next order in the list. 
-        
+        '''Get the next order in the list.
+
         Set self.last as the next order. If there is no next order, stop
         iterating through list.
         '''
@@ -59,7 +59,7 @@ class OrderList(object):
         self.length -= 1
         if len(self) == 0: # if there are no more Orders, stop/return
             return
-        
+
         # Remove an Order from the OrderList. First grab next / prev order
         # from the Order we are removing. Then relink everything. Finally
         # remove the Order.
@@ -87,6 +87,10 @@ class OrderList(object):
 
         order.next_order.prev_order = order.prev_order
 
+        # Added to resolve non termmination bug when traversing after modifying order with a larger quantity.
+        order.prev_order = self.tail_order
+        order.next_order = None
+
         # Move Order to the last position. Link up the previous last position Order.
         self.tail_order.next_order = order
         self.tail_order = order
@@ -98,7 +102,3 @@ class OrderList(object):
             temp_file.write("%s\n" % str(order))
         #temp_file.write("%s\n" % str(self.head_order))
         return temp_file.getvalue()
-            
-
-            
-
