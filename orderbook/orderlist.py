@@ -87,10 +87,6 @@ class OrderList(object):
 
         order.next_order.prev_order = order.prev_order
 
-        # Added to resolve non termmination bug when traversing after modifying order with a larger quantity.
-        order.prev_order = self.tail_order
-        order.next_order = None
-
         # Added to resolved issue #16
         order.prev_order = self.tail_order
         order.next_order = None
