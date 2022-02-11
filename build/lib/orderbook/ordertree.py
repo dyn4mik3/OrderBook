@@ -1,6 +1,6 @@
 from sortedcontainers import SortedDict
-from orderlist import OrderList
-from order import Order
+from .orderlist import OrderList
+from .order import Order
 
 class OrderTree(object):
     '''A red-black tree used to store OrderLists in price order
